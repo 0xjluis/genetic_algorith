@@ -24,7 +24,7 @@ function  generate(length: number):PopulationFit[] {
     for(let i=0; i< length;i++){
     	let chromosome:string[] = [];
 
-	    for(let i=0; i<bitesLength; i++){
+	    for(let j=0; j<bitesLength; j++){
 	    	let gen = Math.floor(Math.random() * Math.floor(2));
 	    	chromosome.push(gen.toString());
 	    }
