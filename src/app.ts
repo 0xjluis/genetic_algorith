@@ -1,10 +1,4 @@
-
 console.log("**********************************")
-
-interface PopulationFit{
-	chromosome: string,
-	fitness:number
-}
 
 const mutationProb = 0.002;
 const crossOverProb = 0.6; 
@@ -12,8 +6,19 @@ const bitesLength = 35;
 const discoverThis = "01010111011100100100000100111111000";
 
 
+interface PopulationFit{
+	chromosome: string,
+	fitness:number
+}
+
+interface PopulationGroup {
+	fitness:number,
+	chromosomes: string[],
+	probability: number
+}
+
+
 function  generate(length: number):PopulationFit[] {
-	
     let population:PopulationFit[] = []
 
     for(let i=0; i< length;i++){
@@ -39,7 +44,6 @@ function  generate(length: number):PopulationFit[] {
 
 
 function calFitness(chromosome:string){
-
 	let result = [...discoverThis];
 	let test = [...chromosome];
 
@@ -51,13 +55,6 @@ function calFitness(chromosome:string){
     }
 
     return score;
-}
-
-
-interface PopulationGroup {
-	fitness:number,
-	chromosomes: string[],
-	probability: number
 }
 
 
@@ -116,7 +113,7 @@ function getOneWinner(populationGroupProbs:PopulationGroup[]){
 
 	let winnerChomosome = 0;
 	if(populationGroupProbs[winnerIndex].chromosomes.length > 1){
-		console.log("winner long")
+		//console.log("winner long")
 		winnerChomosome = Math.floor(Math.random() * Math.floor(populationGroupProbs[winnerIndex].chromosomes.length));
 	}
 	console.log(`winner choosen is ${winnerChomosome}`)
@@ -188,12 +185,13 @@ function mutate(mergedWinners:string[]):string[]{
 	return [ mutatedChromOne,mutatedChromTwo ]
 }
 
+//!! This method makes the population return to the mean 
 function replaceInPopulation(population:PopulationFit[], toFind:string[], toReplace:string[]){
 
 	for (let i = 0; i < toFind.length; i++){
 		let toUpdateIndex = population.findIndex((chromosome:PopulationFit) => chromosome.chromosome === toFind[i]);
 		if(toUpdateIndex !== -1) {
-			console.log("find One");
+			//console.log("find One");
 			population[toUpdateIndex].chromosome = toReplace[i];
 			population[toUpdateIndex].fitness = calFitness(toReplace[i]);
 		}
@@ -213,19 +211,19 @@ function addToPopulation(population:PopulationFit[], toAdd:string[]){
     	}
 		population.push(chromosomeToAdd);
 	}
-
 	return population;
 }
 
 
 function checkFind(population:PopulationFit[]){
+	
 	let findIndex = population.findIndex((chromosome:PopulationFit) => chromosome.chromosome === discoverThis);
 	return findIndex
 }
 
 
-
 function removeLeastFittest(population:PopulationFit[]){
+	
 	population.sort((a, b) => a.fitness - b.fitness);
 	population = population.slice(2);
 	return population
@@ -233,6 +231,7 @@ function removeLeastFittest(population:PopulationFit[]){
 
 
 function init(generations:number){
+	
 	let  population = generate(100);
 	console.log(population);
 
@@ -251,24 +250,20 @@ function init(generations:number){
 		const mutated = mutate(mergedWinners);
 		//console.log("mutated",mutated)
 
-		//population = replaceInPopulation(population, winners, mutated); 
-
-		
-
 		population = addToPopulation(population, mutated);
 		population = removeLeastFittest(population);
 		const solution = checkFind(population);
 
 		if(solution != -1){
 			console.log(population);
-			console.log("SOlution!!!", solution)
+			console.log("Solution population index", solution)
 			console.log("generation n", i)
 			console.log("🗝 SOLUTION!!!", population[solution])
 			break;
 		}
 	}
-
 }
+
 
 init(500);
 
