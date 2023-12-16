@@ -99,7 +99,7 @@ function calcProv(populationGroup:PopulationGroup[], sumFitness:number){
 function getOneWinner(populationGroupProbs:PopulationGroup[]){
 	const randomWinner = Math.random();
 	console.log(randomWinner);
-	let modRandom = Math.min(randomWinner + 0.2, 1);
+	let modRandom = Math.min(randomWinner + 0.25, 1);
 	let winnerIndex = 0;
 	for (let i = 0; i < populationGroupProbs.length; i++){
 		if(modRandom > populationGroupProbs[i].probability){
